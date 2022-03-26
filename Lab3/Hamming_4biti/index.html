@@ -2,14 +2,14 @@
   <head>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
     <title>Hamming Encoder</title>
-    <link rel="stylesheet " type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
 
   <body>
     <div id="hamming-encoder">
       <h1>
         Hamming code for
-        <select v-on : change="initDataBits()" v-model="numberOfDataBits">
+        <select v-on:change="initDataBits()" v-model="numberOfDataBits">
           <option value="4">4</option>
           <option value="8">8</option>
         </select>
@@ -17,12 +17,11 @@
       </h1>
 
       <br />
-      <ul v-for="(bit,index) in dataBits ">
+      <ul v-for="(bit,index) in dataBits">
         <li>
           <input
             maxlength="1"
-            :
-            placeholder="'D'+index"
+            :placeholder="'D'+index"
             v-model="bit.data"
             v-bind:class="[validateBit(bit.data) ? 'valid-input' : 'invalid-input']"
           />

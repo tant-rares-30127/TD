@@ -1,5 +1,5 @@
 var app = new Vue({
-  el: "#hamming-encoder ",
+  el: "#hamming-encoder",
   data: {
     dataBits: [],
     status: "",

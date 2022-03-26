@@ -2,7 +2,7 @@ var api = require("./api.js").app;
 var hamming = require("./hamming.js");
 api.put("/ message ", function (request, response) {
   var bits = request.body.bits;
-  // bits = distortBit (bits , 2);
+  bits = distortBit(bits, 2);
 
   var decoded = hamming.decode(bits);
   if (decoded.errorCorrected) {
