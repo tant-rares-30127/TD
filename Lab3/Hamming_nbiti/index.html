@@ -9,10 +9,11 @@
     <div id="hamming-encoder">
       <h1>
         Hamming code for
-        <select v-on:change="initDataBits()" v-model="numberOfDataBits">
-          <option value="4">4</option>
-          <option value="8">8</option>
-        </select>
+        <input
+          v-on:change="initDataBits()"
+          v-model="numberOfDataBits"
+          id="bitsInput"
+        />
         bits
       </h1>
 
