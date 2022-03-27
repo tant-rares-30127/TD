@@ -1,5 +1,3 @@
-const e = require("express");
-
 var app = new Vue({
   el: "#hamming-encoder",
   data: {
@@ -35,34 +33,70 @@ var app = new Vue({
       // This function must be changed to allow anynumber of data bits
       // Right now it only works for 4 data bits
       // Number of control bits
-      var k;
-      if (bits.length === 1) k = 2;
+      var k = 0;
+      var m = bits.length;
+
+      if (m === 1) k = 2;
       else {
-        if (bits.length === 2) k = 3;
+        if (m === 2) k = 3;
         else {
-          for (var i = 2; i <= bits.length; i++) {
-            if (2 ^ (i >= m + k + 1)) {
+          for (var i = 2; i <= m; i++) {
+            if (Math.pow(2, i) >= m + i + 1) {
               k = i;
-              break;
             }
+            if (k != 0) break;
           }
         }
       }
+      var H = [];
+      for (var i = 0; i < k; i++) {
+        H[i] = [];
+        for (var j = 0; j < k + m; j++) {
+          H[i][j] = 0;
+        }
+      }
 
-      console.log(" Control bits : " + c1 + "," + c2 + "," + c4 + "," + c8);
+      for (var i = 0; i < k + m; i++) {
+        var j = k - 1;
+        var x = i + 1;
+        while (x > 0) {
+          H[j][i] = x % 2;
+          x = Math.floor(x / 2);
+          j = j - 1;
+        }
+      }
+      console.table(H);
+
+      var cbits = [];
+      for (var i = 0; i < k; i++) {
+        var n = 0;
+        var s = 0;
+        var pow = 0;
+        for (var j = 0; j < k + m; j++) {
+          if (Math.pow(2, pow) != j + 1) {
+            s = s + H[i][j] * bits[n].data;
+            n = n + 1;
+          } else {
+            pow = pow + 1;
+          }
+        }
+        console.log(" ");
+        cbits.push(this.parity(s));
+      }
+      console.log(cbits.reverse());
       return [
-        c1,
-        c2,
-        parseInt(bits[0].data),
-        c4,
-        parseInt(bits[1].data),
-        parseInt(bits[2].data),
-        parseInt(bits[3].data),
-        c8,
-        parseInt(bits[4].data),
-        parseInt(bits[5].data),
-        parseInt(bits[6].data),
-        parseInt(bits[7].data),
+        // c1,
+        // c2,
+        // parseInt(bits[0].data),
+        // c4,
+        // parseInt(bits[1].data),
+        // parseInt(bits[2].data),
+        // parseInt(bits[3].data),
+        // c8,
+        // parseInt(bits[4].data),
+        // parseInt(bits[5].data),
+        // parseInt(bits[6].data),
+        // parseInt(bits[7].data),
       ];
     },
     parity: function (number) {
