@@ -48,3 +48,7 @@ code {
   background-color: #efffec;
   margin: 0 px;
 }
+
+#bitsInput {
+  width: 3rem;
+}
