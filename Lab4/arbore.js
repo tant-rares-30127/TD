@@ -80,7 +80,23 @@
 //   ],
 // };
 
-// %Definirea dimensiunii de afisare a arborelui
+document.getElementById("button").addEventListener("click", function () {
+  nrAppearences();
+});
+
+function nrAppearences() {
+  var text = document.getElementById("text").value;
+  var mapLetters = new Map();
+  for (var i = 0; i < text.length; i++) {
+    var letter = text[i];
+    if (mapLetters.has(letter))
+      mapLetters.set(letter, mapLetters.get(letter) + 1);
+    else mapLetters.set(letter, 1);
+  }
+  console.log(mapLetters);
+}
+
+// Definirea dimensiunii de afisare a arborelui
 var margin = { top: 20, right: 90, bottom: 30, left: 90 },
   width = 1960 - margin.left - margin.right,
   height = 800 - margin.top - margin.bottom;
