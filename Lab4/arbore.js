@@ -80,8 +80,11 @@
 //   ],
 // };
 
+var treeData;
+
 document.getElementById("button").addEventListener("click", function () {
-  nrAppearences();
+  treeData = nrAppearences();
+  drawTree(treeData);
 });
 
 function nrAppearences() {
@@ -99,8 +102,11 @@ function nrAppearences() {
     name: "A0",
     children: [],
   };
-  tree = createTree(mapLettersSorted);
+  var position = "A0";
+  var level = 0;
+  tree = createTree(mapLettersSorted, position, level);
   console.log(tree);
+  return tree;
 }
 
 function sort(map) {
@@ -117,12 +123,13 @@ function sort(map) {
   return new Map(sortedArray);
 }
 
-function createTree(map) {
+function createTree(map, position, level) {
   var tree = {};
   if (map.size == 1) {
     for (var x of map.keys()) {
       console.log(x);
-      tree.name = x;
+      if (x == " ") x = "space";
+      tree.name = "LEVEL " + level + ": " + position + " = " + x;
     }
     return tree;
   } else {
@@ -150,56 +157,64 @@ function createTree(map) {
         reachedHalf = true;
       }
     });
-    tree.name = "LEVEL";
-    if (mapL.size != 0) {
-      tree.childrenL = [];
-      tree.childrenL.push(createTree(mapL));
-    }
+    tree.name = "LEVEL " + level + ": " + position;
+    tree.children = [];
     if (mapR.size != 0) {
-      tree.childrenR = [];
-      tree.childrenR.push(createTree(mapR));
+      tree.children.push(createTree(mapR, position + "R", level + 1));
     }
+    if (mapL.size != 0) {
+      tree.children.push(createTree(mapL, position + "L", level + 1));
+    }
+
     return tree;
   }
 }
 
-// Definirea dimensiunii de afisare a arborelui
-var margin = { top: 20, right: 90, bottom: 30, left: 90 },
-  width = 1960 - margin.left - margin.right,
-  height = 800 - margin.top - margin.bottom;
+var margin;
+var svg;
+var i;
+var duration;
+var root;
+var treemap;
 
-// append the svg object to the body of the page
-// appends a 'group ' element to 'svg '
-// moves the 'group ' element to the top left margin
+function drawTree() {
+  // Definirea dimensiunii de afisare a arborelui
+  (margin = { top: 20, right: 90, bottom: 30, left: 90 }),
+    (width = 1960 - margin.left - margin.right),
+    (height = 800 - margin.top - margin.bottom);
 
-var svg = d3
-  .select("body")
-  .append("svg")
-  .attr("width", width + margin.right + margin.left)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  // append the svg object to the body of the page
+  // appends a 'group ' element to 'svg '
+  // moves the 'group ' element to the top left margin
 
-var i = 0,
-  duration = 750,
-  root;
+  svg = d3
+    .select("body")
+    .append("svg")
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-//defineste layout pentru arbore si ii asigneaza dimensiuni
+  i = 0;
+  duration = 750;
 
-var treemap = d3.tree().size([height, width]);
+  //defineste layout pentru arbore si ii asigneaza dimensiuni
 
-//Asigneaza parinte , copil , inaltime , adancime
+  treemap = d3.tree().size([height, width]);
 
-root = d3.hierarchy(treeData, function (d) {
-  return d.children;
-});
-root.x0 = height / 2;
-root.y0 = 0;
+  //Asigneaza parinte , copil , inaltime , adancime
 
-//Inchide dupa al doilea nivel
-root.children.forEach(collapse);
+  root = d3.hierarchy(treeData, function (d) {
+    return d.children;
+  });
+  root.x0 = height / 2;
+  root.y0 = 0;
 
-update(root);
+  //Inchide dupa al doilea nivel
+  root.children.forEach(collapse);
+
+  update(root);
+}
 
 //Inchide nodul si toti copiii lui
 
