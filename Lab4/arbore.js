@@ -93,7 +93,17 @@ function nrAppearences() {
       mapLetters.set(letter, mapLetters.get(letter) + 1);
     else mapLetters.set(letter, 1);
   }
-  console.log(mapLetters);
+  var mapLettersSorted = sort(mapLetters);
+  console.log(mapLettersSorted);
+}
+
+function sort(map) {
+  var array = Array.from(map);
+  console.log(array);
+  var sortedArray = array.sort(
+    ([key1, value1], [key2, value2]) => value2 - value1
+  );
+  return new Map(sortedArray);
 }
 
 // Definirea dimensiunii de afisare a arborelui
