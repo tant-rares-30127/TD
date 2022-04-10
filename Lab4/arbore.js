@@ -33,7 +33,6 @@ function nrAppearences() {
 
 function sort(map) {
   var array = Array.from(map);
-  console.log(array);
   var sortedArray = array.sort(([key1, value1], [key2, value2]) => {
     if (value1 > value2) return -1;
     if (value2 < value1) return 1;
@@ -49,7 +48,6 @@ function createTree(map, position, level) {
   var tree = {};
   if (map.size == 1) {
     for (var x of map.keys()) {
-      console.log(x);
       if (x == " ") x = "space";
       tree.name = "LEVEL " + level + ": " + position + " = " + x;
     }
