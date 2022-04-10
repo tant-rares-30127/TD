@@ -95,8 +95,11 @@ function nrAppearences() {
   }
   var mapLettersSorted = sort(mapLetters);
   console.log(mapLettersSorted);
-  var tree = {};
-  // tree = createTree(mapLettersSorted, tree);
+  var tree = {
+    name: "A0",
+    children: [],
+  };
+  tree = createTree(mapLettersSorted);
   console.log(tree);
 }
 
@@ -114,10 +117,12 @@ function sort(map) {
   return new Map(sortedArray);
 }
 
-function createTree(map, tree) {
+function createTree(map) {
+  var tree = {};
   if (map.size == 1) {
     for (var x of map.keys()) {
       console.log(x);
+      tree.name = x;
     }
     return tree;
   } else {
@@ -145,10 +150,15 @@ function createTree(map, tree) {
         reachedHalf = true;
       }
     });
-    console.log(mapL);
-    console.log(mapR);
-    if (mapL.size != 0) tree = createTree(mapL, tree);
-    if (mapR.size != 0) tree = createTree(mapR, tree);
+    tree.name = "LEVEL";
+    if (mapL.size != 0) {
+      tree.childrenL = [];
+      tree.childrenL.push(createTree(mapL));
+    }
+    if (mapR.size != 0) {
+      tree.childrenR = [];
+      tree.childrenR.push(createTree(mapR));
+    }
     return tree;
   }
 }
