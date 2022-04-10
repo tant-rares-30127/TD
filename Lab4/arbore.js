@@ -96,16 +96,21 @@ function nrAppearences() {
   var mapLettersSorted = sort(mapLetters);
   console.log(mapLettersSorted);
   var tree = {};
-  tree = createTree(mapLettersSorted, tree);
+  // tree = createTree(mapLettersSorted, tree);
   console.log(tree);
 }
 
 function sort(map) {
   var array = Array.from(map);
   console.log(array);
-  var sortedArray = array.sort(
-    ([key1, value1], [key2, value2]) => value2 - value1
-  );
+  var sortedArray = array.sort(([key1, value1], [key2, value2]) => {
+    if (value1 > value2) return -1;
+    if (value2 < value1) return 1;
+    if (value1 == value2) {
+      if (key1 < key2) return -1;
+      else return 1;
+    }
+  });
   return new Map(sortedArray);
 }
 
