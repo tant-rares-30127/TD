@@ -95,6 +95,9 @@ function nrAppearences() {
   }
   var mapLettersSorted = sort(mapLetters);
   console.log(mapLettersSorted);
+  var tree = {};
+  tree = createTree(mapLettersSorted, tree);
+  console.log(tree);
 }
 
 function sort(map) {
@@ -104,6 +107,45 @@ function sort(map) {
     ([key1, value1], [key2, value2]) => value2 - value1
   );
   return new Map(sortedArray);
+}
+
+function createTree(map, tree) {
+  if (map.size == 1) {
+    for (var x of map.keys()) {
+      console.log(x);
+    }
+    return tree;
+  } else {
+    var s = 0;
+    for (var x of map.values()) {
+      s = s + x;
+    }
+    var newS = 0;
+    var mapL = new Map();
+    var mapR = new Map();
+    var reachedHalf = false;
+    var isFirst = true;
+    map.forEach(function (value, key) {
+      if (Math.floor(s / 2) >= newS + value && reachedHalf == false) {
+        newS = newS + value;
+        mapL.set(key, value);
+        isFirst = false;
+      } else {
+        if (isFirst == true) {
+          mapL.set(key, value);
+          isFirst = false;
+        } else {
+          mapR.set(key, value);
+        }
+        reachedHalf = true;
+      }
+    });
+    console.log(mapL);
+    console.log(mapR);
+    if (mapL.size != 0) tree = createTree(mapL, tree);
+    if (mapR.size != 0) tree = createTree(mapR, tree);
+    return tree;
+  }
 }
 
 // Definirea dimensiunii de afisare a arborelui
